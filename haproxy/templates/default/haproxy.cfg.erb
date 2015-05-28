@@ -79,6 +79,9 @@ backend php_app_servers
   <% node[:haproxy][:php_backends].each do |backend| -%>
   server <%= backend['name'] %> <%= backend['ip'] %>:80 weight <%= backend['backends'] || 10 %> maxconn <%= backend['backends'] * node[:haproxy][:maxcon_factor_php_app] %> check inter <%= node[:haproxy][:check_interval] %>
   <% end -%>  
+  <% node[:haproxy][:readycart_app].each do |backend| -%>
+  server <%= backend['name'] %> <%= backend['ip'] %>:80 weight <%= backend['backends'] || 10 %> maxconn <%= backend['backends'] * node[:haproxy][:maxcon_factor_php_app] %> check inter <%= node[:haproxy][:check_interval] %>
+  <% end -%>
 <% end -%>
 
 <% if !node[:haproxy][:php_backends].empty? -%>  
