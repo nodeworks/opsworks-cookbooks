@@ -81,14 +81,14 @@ backend php_app_servers
   <% end -%>  
 <% end -%>
 
-<% if !node[:opsworks][:layers]['readycart_app'][:instances].empty? -%>
+<% if !node[:opsworks][:layers][:readycart_app][:instances].empty? -%>
 backend readycart_app_servers
   balance <%= node[:haproxy][:balance] %>
   option redispatch
   option forwardfor
   option httpchk <%= node[:haproxy][:health_check_method] %> <%= node[:haproxy][:health_check_url] %>
-  <% node[:opsworks][:layers]['readycart_app'][:instances].each do |backend| -%>
-  server :80
+  <% node[:opsworks][:layers][:readycart_app][:instances].each do |backend| -%>
+  server <%= backend['aws_instance_id'] %> 127.0.0.1:80 weight <%= backend['backends'] || 10 %> maxconn <%= backend['backends'] * node[:haproxy][:maxcon_factor_php_app] %> check inter <%= node[:haproxy][:check_interval] %>
   <% end -%>  
 <% end -%>
 
