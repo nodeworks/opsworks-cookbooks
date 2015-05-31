@@ -17,12 +17,7 @@ execute "install-drush" do
   action :run
 end
 
-service "FPM stop" do
-  service_name "php-fpm"
-  action :stop
-end
-
-service "FPM start" do
-  service_name "php-fpm"
-  action :start
+execute "restart php-fpm" do
+  command "sudo service php-fpm restart"
+  action :run
 end
