@@ -16,3 +16,13 @@ execute "install-drush" do
   command "sudo apt-get install drush -y && sudo drush > null && sudo chown -R ubuntu:ubuntu /home/ubuntu/.drush"
   action :run
 end
+
+service "FPM stop" do
+  service_name "php-fpm"
+  action :stop
+end
+
+service "FPM start" do
+  service_name "php-fpm"
+  action :start
+end
