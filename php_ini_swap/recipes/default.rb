@@ -13,6 +13,6 @@ cookbook_file "/etc/php.ini" do
 end
 
 execute "install-drush" do
-  command "sudo apt-get install drush -y && sudo drush > null && sudo chown -R ubuntu:ubunutu /home/ubuntu/.drush"
+  command "sudo apt-get install drush -y && sudo drush > null && sudo chown -R ubuntu:ubuntu /home/ubuntu/.drush"
   action :run
 end
