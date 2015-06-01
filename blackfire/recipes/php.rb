@@ -41,6 +41,6 @@ template node[cookbook_name]['php']['ini_path'] do
 end
 
 execute 'Restart PHP-FPM' do
-  command "sudo services php-fpm restart"
+  command "sudo service php-fpm restart"
   action :run
 end
