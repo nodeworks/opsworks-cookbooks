@@ -18,4 +18,3 @@ supports 'fedora'
 supports 'centos'
 
 depends 'apt'
-depends 'yum'
