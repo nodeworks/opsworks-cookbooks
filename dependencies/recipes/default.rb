@@ -38,7 +38,7 @@ end
 
 if node["opsworks"].has_key?("instance") && node["opsworks"]["instance"].has_key?("layers") && node["opsworks"]["instance"]["layers"].include?("readycart_app")
   execute "change www-data home directory" do
-    command "sudo service php-fpm stop && sudo service nginx stop && sudo usermod -d /home/www-data -m www-data && sudo service nginx start && sudo service php-fpm start"
+    command "if echo ~www-data | grep www-data > /dev/null; then echo 0; else sudo service php-fpm stop && sudo service nginx stop && sudo usermod -d /home/www-data -m www-data && sudo service nginx start && sudo service php-fpm start; fi"
     action :run
   end
 end
