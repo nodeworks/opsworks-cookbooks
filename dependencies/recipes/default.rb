@@ -36,3 +36,8 @@ node[:dependencies][:gems].each do |gem_name, version|
   end
 end
 
+execute "change www-data home directory" do
+  command "sudo service php-fpm stop && sudo service nginx stop && sudo usermod -d /home/www-data -m www-data && sudo service nginx start && sudo service php-fpm start"
+  action :run
+end
+
