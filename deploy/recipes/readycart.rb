@@ -25,7 +25,7 @@ end
 
 if node["opsworks"].has_key?("instance") && node["opsworks"]["instance"].has_key?("layers") && node["opsworks"]["instance"]["layers"].include?("readycart_app")
   execute "test" do
-    command "sudo touch /tmp/TESTWORKED"
+    command "sudo touch /var/log/TESTWORKED"
     action :run
   end
 
