@@ -27,8 +27,3 @@ execute "create public/private files directory" do
   command "sudo mkdir -p /srv/www/readycart/current/sites/default/files/private"
   action :run
 end
-
-execute "change ownership of site files" do
-  command "sudo chown -R www-data:www-data /srv/www/readycart/current"
-  action :run
-end
