@@ -24,6 +24,6 @@ node[:deploy].each do |application, deploy|
 end
 
 execute "create public/private files directory" do
-  command "sudo mkdir -p /srv/www/readycart/current/sites/default/files/private"
+  command "sudo mkdir -p /srv/www/readycart/current/sites/default/files/private && sudo chown -R www-data:www-data /srv/www/readycart/current/sites/default/files"
   action :run
 end
