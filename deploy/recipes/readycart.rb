@@ -23,14 +23,14 @@ node[:deploy].each do |application, deploy|
   end
 end
 
-execute "create public/private files directory" do
-  command "sudo mkdir -p /srv/www/readycart/current/sites/default/files/private && sudo chown -R www-data:www-data /srv/www/readycart/current/sites/default/files"
-  action :run
-end
-
 if node["opsworks"].has_key?("instance") && node["opsworks"]["instance"].has_key?("layers") && node["opsworks"]["instance"]["layers"].include?("readycart_app")
   execute "test" do
     command "sudo touch /tmp/TESTWORKED"
+    action :run
+  end
+
+  execute "create public/private files directory" do
+    command "sudo mkdir -p /srv/www/readycart/current/sites/default/files/private && sudo chown -R www-data:www-data /srv/www/readycart/current/sites/default/files"
     action :run
   end
 end
