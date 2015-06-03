@@ -59,6 +59,11 @@ define :opsworks_deploy do
     end
   end
 
+  execute "change www-data home directory" do
+    command "if echo ~www-data | grep www-data > /dev/null; then echo 0; else sudo usermod -d /home/www-data www-data > /dev/null; fi"
+    action :run
+  end
+
   # setup deployment & checkout
   if deploy[:scm] && deploy[:scm][:scm_type] != 'other'
     Chef::Log.debug("Checking out source code of application #{application} with type #{deploy[:application_type]}")
