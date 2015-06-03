@@ -2,6 +2,11 @@ define :opsworks_deploy do
   application = params[:app]
   deploy = params[:deploy_data]
 
+  execute "create www-data user if it doesn't exist" do
+    command "id -u www-data || useradd -d /home/www-data -s /bin/bash -m -U www-data"
+    action :run
+  end
+
   directory "#{deploy[:deploy_to]}" do
     group deploy[:group]
     owner deploy[:user]

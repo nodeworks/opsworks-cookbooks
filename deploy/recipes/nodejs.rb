@@ -6,11 +6,6 @@ node[:deploy].each do |application, deploy|
     next
   end
 
-  execute "change www-data home directory" do
-    command "id -u www-data || useradd -d /home/www-data -s /bin/bash -m -U www-data"
-    action :run
-  end
-
   opsworks_deploy_dir do
     user deploy[:user]
     group deploy[:group]
