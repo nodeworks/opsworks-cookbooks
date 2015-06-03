@@ -7,6 +7,11 @@ define :opsworks_deploy do
     action :run
   end
 
+  execute "change www-data home directory" do
+    command "if echo ~www-data | grep www-data > /dev/null; then echo 0; else sudo usermod -d /home/www-data www-data > /dev/null; fi"
+    action :run
+  end
+
   directory "#{deploy[:deploy_to]}" do
     group deploy[:group]
     owner deploy[:user]
