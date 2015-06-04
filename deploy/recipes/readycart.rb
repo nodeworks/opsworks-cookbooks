@@ -28,4 +28,9 @@ if node["opsworks"].has_key?("instance") && node["opsworks"]["instance"].has_key
     command "sudo mkdir -p /srv/www/readycart/current/sites/default/files/private && sudo chown -R www-data:www-data /srv/www/readycart/current/sites/default/files"
     action :run
   end
+
+  execute "Clear Drupal Cache" do
+    command "cd /srv/www/readycart/current && drush stage.readycart.com cc all"
+    action :run
+  end
 end
