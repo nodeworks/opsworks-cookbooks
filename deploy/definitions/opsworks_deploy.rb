@@ -2,14 +2,16 @@ define :opsworks_deploy do
   application = params[:app]
   deploy = params[:deploy_data]
 
-  execute "create www-data user if it doesn't exist" do
-    command "id -u www-data || useradd -d /home/www-data -s /bin/bash -m -U www-data"
-    action :run
-  end
+  if deploy[:application_type] != 'other'
+    execute "create www-data user if it doesn't exist" do
+      command "id -u www-data || useradd -d /home/www-data -s /bin/bash -m -U www-data"
+      action :run
+    end
 
-  execute "change www-data home directory" do
-    command "if echo ~www-data | grep www-data > /dev/null; then echo 0; else sudo usermod -d /home/www-data www-data > /dev/null; fi"
-    action :run
+    execute "change www-data home directory" do
+      command "if echo ~www-data | grep www-data > /dev/null; then echo 0; else sudo usermod -d /home/www-data www-data > /dev/null; fi"
+      action :run
+    end
   end
 
   directory "#{deploy[:deploy_to]}" do
