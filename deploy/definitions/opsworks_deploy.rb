@@ -2,58 +2,33 @@ define :opsworks_deploy do
   application = params[:app]
   deploy = params[:deploy_data]
 
-  if deploy[:application_type] != 'other'
-    execute "create www-data user if it doesn't exist" do
-      command "id -u www-data || useradd -d /home/www-data -s /bin/bash -m -U www-data"
-      action :run
-    end
-
-    execute "change www-data home directory" do
-      command "if echo ~www-data | grep www-data > /dev/null; then echo 0; else sudo usermod -d /home/www-data www-data > /dev/null; fi"
-      action :run
-    end
+  execute "create www-data user if it doesn't exist" do
+    command "id -u www-data || useradd -d /home/www-data -s /bin/bash -m -U www-data"
+    action :run
   end
 
-  if deploy[:application_type] == 'other'
-    directory "#{deploy[:deploy_to]}" do
-        group deploy[:group]
-        owner 'deploy'
-        mode "0775"
-        action :create
-        recursive true
-      end
+  execute "change www-data home directory" do
+    command "if echo ~www-data | grep www-data > /dev/null; then echo 0; else sudo usermod -d /home/www-data www-data > /dev/null; fi"
+    action :run
   end
 
-  if deploy[:application_type] != 'other'
-    directory "#{deploy[:deploy_to]}" do
-      group deploy[:group]
-      owner deploy[:user]
-      mode "0775"
-      action :create
-      recursive true
-    end
+  directory "#{deploy[:deploy_to]}" do
+    group deploy[:group]
+    owner deploy[:user]
+    mode "0775"
+    action :create
+    recursive true
   end
 
   if deploy[:scm]
     ensure_scm_package_installed(deploy[:scm][:scm_type])
 
-    if deploy[:application_type] != 'other'
-      prepare_git_checkouts(
-        :user => deploy[:user],
-        :group => deploy[:group],
-        :home => deploy[:home],
-        :ssh_key => deploy[:scm][:ssh_key]
-      ) if deploy[:scm][:scm_type].to_s == 'git'
-    end
-
-    if deploy[:application_type] == 'other'
-      prepare_git_checkouts(
-        :user => 'deploy',
-        :group => deploy[:group],
-        :home => deploy[:home],
-        :ssh_key => deploy[:scm][:ssh_key]
-      ) if deploy[:scm][:scm_type].to_s == 'git'
-    end
+    prepare_git_checkouts(
+      :user => deploy[:user],
+      :group => deploy[:group],
+      :home => deploy[:home],
+      :ssh_key => deploy[:scm][:ssh_key]
+    ) if deploy[:scm][:scm_type].to_s == 'git'
 
     prepare_svn_checkouts(
       :user => deploy[:user],
@@ -101,14 +76,7 @@ define :opsworks_deploy do
       provider Chef::Provider::Deploy.const_get(deploy[:chef_provider])
       keep_releases deploy[:keep_releases]
       repository deploy[:scm][:repository]
-      if deploy[:application_type] == 'other'
-        user 'deploy'
-      end
-
-      if deploy[:application_type] != 'other'
-        user deploy[:user]
-      end
-
+      user deploy[:user]
       group deploy[:group]
       revision deploy[:scm][:revision]
       migrate deploy[:migrate]
