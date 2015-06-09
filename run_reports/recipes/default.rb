@@ -8,6 +8,6 @@
 #
 
 execute "create public/private files directory" do
-  command "cd /srv/www/readycart_reports/current && php run reports"
+  command "cd /srv/www/readycart_workers/current && php run reports"
   action :run
 end
