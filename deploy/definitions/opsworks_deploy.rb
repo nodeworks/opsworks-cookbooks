@@ -14,6 +14,10 @@ define :opsworks_deploy do
     end
   end
 
+  if deploy[:application_type] == 'other'
+    deploy[:user] = 'deploy'
+  end
+
   directory "#{deploy[:deploy_to]}" do
     group deploy[:group]
     owner deploy[:user]

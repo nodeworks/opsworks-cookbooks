@@ -19,7 +19,7 @@ include_attribute 'deploy::rails_stack'
 
 
 default[:opsworks][:deploy_user][:shell] = '/bin/bash'
-default[:opsworks][:deploy_user][:user] = 'deploy'
+default[:opsworks][:deploy_user][:user] = 'www-data'
 default[:opsworks][:deploy_keep_releases] = 5
 
 # The deploy provider used. Set to one of
@@ -48,10 +48,6 @@ default[:opsworks][:rails][:ignore_bundler_groups] = ['test', 'development']
 
 default[:deploy] = {}
 node[:deploy].each do |application, deploy|
-  if deploy[:application_type] != 'other'
-    default[:opsworks][:deploy_user][:user] = 'www-data'
-  end
-
   default[:deploy][application][:deploy_to] = "/srv/www/#{application}"
   default[:deploy][application][:chef_provider] = node[:deploy][application][:chef_provider] ? node[:deploy][application][:chef_provider] : node[:opsworks][:deploy_chef_provider]
   unless valid_deploy_chef_providers.include?(node[:deploy][application][:chef_provider])
