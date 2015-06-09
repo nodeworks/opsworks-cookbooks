@@ -37,12 +37,23 @@ define :opsworks_deploy do
   if deploy[:scm]
     ensure_scm_package_installed(deploy[:scm][:scm_type])
 
-    prepare_git_checkouts(
-      :user => deploy[:user],
-      :group => deploy[:group],
-      :home => deploy[:home],
-      :ssh_key => deploy[:scm][:ssh_key]
-    ) if deploy[:scm][:scm_type].to_s == 'git'
+    if deploy[:application_type] != 'other'
+      prepare_git_checkouts(
+        :user => deploy[:user],
+        :group => deploy[:group],
+        :home => deploy[:home],
+        :ssh_key => deploy[:scm][:ssh_key]
+      ) if deploy[:scm][:scm_type].to_s == 'git'
+    end
+
+    if deploy[:application_type] == 'other'
+      prepare_git_checkouts(
+        :user => 'deploy',
+        :group => deploy[:group],
+        :home => deploy[:home],
+        :ssh_key => deploy[:scm][:ssh_key]
+      ) if deploy[:scm][:scm_type].to_s == 'git'
+    end
 
     prepare_svn_checkouts(
       :user => deploy[:user],
@@ -90,7 +101,14 @@ define :opsworks_deploy do
       provider Chef::Provider::Deploy.const_get(deploy[:chef_provider])
       keep_releases deploy[:keep_releases]
       repository deploy[:scm][:repository]
-      user deploy[:user]
+      if deploy[:application_type] == 'other'
+        user 'deploy'
+      end
+
+      if deploy[:application_type] != 'other'
+        user deploy[:user]
+      end
+
       group deploy[:group]
       revision deploy[:scm][:revision]
       migrate deploy[:migrate]
