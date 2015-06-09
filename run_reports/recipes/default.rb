@@ -7,7 +7,7 @@
 # All rights reserved - Do Not Redistribute
 #
 
-execute "create public/private files directory" do
+execute "run reports" do
   command "cd /srv/www/readycart_workers/current && php run reports"
   action :run
 end
