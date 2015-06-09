@@ -15,15 +15,23 @@ define :opsworks_deploy do
   end
 
   if deploy[:application_type] == 'other'
-    deploy[:user] = 'deploy'
+    directory "#{deploy[:deploy_to]}" do
+        group deploy[:group]
+        owner 'deploy'
+        mode "0775"
+        action :create
+        recursive true
+      end
   end
 
-  directory "#{deploy[:deploy_to]}" do
-    group deploy[:group]
-    owner deploy[:user]
-    mode "0775"
-    action :create
-    recursive true
+  if deploy[:application_type] != 'other'
+    directory "#{deploy[:deploy_to]}" do
+      group deploy[:group]
+      owner deploy[:user]
+      mode "0775"
+      action :create
+      recursive true
+    end
   end
 
   if deploy[:scm]
