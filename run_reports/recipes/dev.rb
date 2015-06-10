@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: run_reports
-# Recipe:: default
+# Recipe:: dev
 #
 # Copyright 2015, YOUR_COMPANY_NAME
 #
