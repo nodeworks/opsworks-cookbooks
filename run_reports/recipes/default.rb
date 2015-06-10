@@ -8,6 +8,6 @@
 #
 
 execute "run reports" do
-  command "cd /srv/www/readycart_workers/current && php run reports"
+  command "cd /srv/www/readycart_workers/current && php run cron && php run reports"
   action :run
 end
