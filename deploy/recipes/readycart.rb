@@ -25,7 +25,7 @@ end
 
 if node["opsworks"].has_key?("instance") && node["opsworks"]["instance"].has_key?("layers") && node["opsworks"]["instance"]["layers"].include?("readycart_app")
   execute "create public/private files directory" do
-    command "sudo mkdir -p /srv/www/readycart/current/sites/default/files/private && sudo chown -R www-data:www-data /srv/www/readycart/current/sites/default/files"
+    command "sudo mkdir -p /srv/www/readycart/current/sites/default/files/private && sudo chown -R www-data:www-data /srv/www/readycart/current/sites/default/files/private"
     action :run
   end
 end
