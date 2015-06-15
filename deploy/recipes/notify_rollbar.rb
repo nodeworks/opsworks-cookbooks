@@ -3,11 +3,7 @@
 # Recipe:: readycart
 #
 
-
 execute "Notify rollbar of deployment" do
-  environment = node[:deploy]['readycart'][:scm][:revision]
-  access_token = '7ac65697d0964dd9834a222341209467'
-  revision = node[:deploy]['readycart'][:scm][:revision]
-  command "curl https://api.rollbar.com/api/1/deploy/ -F access_token=$ACCESS_TOKEN -F environment=$ENVIRONMENT -F revision=$REVISION -F local_username=$LOCAL_USERNAME"
+  command "cd /srv/www/readycart/current && curl https://api.rollbar.com/api/1/deploy/ -F access_token=7ac65697d0964dd9834a222341209467 -F environment=#{node[:deploy][:readycart][:scm][:revision]} -F revision=`git log -n 1 --pretty=format:\"%H\"` -F local_username=`git log -n 1 --pretty=format:\"%an\"` -F comment=`git log -n 1 --pretty=format:\"%s\"`"
   action :run
 end
