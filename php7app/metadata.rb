@@ -1,0 +1,7 @@
+name             'php7app'
+maintainer       'YOUR_NAME'
+maintainer_email 'YOUR_EMAIL'
+license          'All rights reserved'
+description      'Installs/Configures php7app'
+long_description 'Installs/Configures php7app'
+version          '0.1.0'
